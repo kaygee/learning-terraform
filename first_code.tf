@@ -1,16 +1,24 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.27"
+    }
+  }
+
+  required_version = ">= 0.14.9"
+}
+
 provider "aws" {
-    profile = "default"
-    region = "us-west-2"
+  profile = "default"
+  region  = "us-west-2"
 }
 
-resource "aws_s3_bucket" "tf_course" {
-    bucket = "tf-course-kg-2022-03-11"
-}
+resource "aws_instance" "app_server" {
+  ami           = "ami-830c94e3"
+  instance_type = "t2.micro"
 
-/* 
-https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/version-4-upgrade#acl-argument
-*/
-resource "aws_s3_bucket_acl" "tf_course" {
-    bucket = aws_s3_bucket.tf_course.id
-      acl = "private"
+  tags = {
+    Name = "ExampleAppServerInstance"
+  }
 }
